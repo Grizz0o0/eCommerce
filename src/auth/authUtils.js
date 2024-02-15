@@ -50,7 +50,7 @@ const authentication = asyncHandler(async (req, res, next) => {
     // 2
     const keyStore = await findByUserId(userId);
     if (!keyStore) throw new NotFoundError('Not Found KeyStore');
-
+    console.log(keyStore);
     // 3
     const accessToken = req.headers[HEADER.AUTHORIZATION];
     if (!accessToken) throw new AuthFailureError('Invalid  Request');
@@ -62,6 +62,7 @@ const authentication = asyncHandler(async (req, res, next) => {
         if (userId !== decodeUser.userId)
             throw new AuthFailureError('Invalid Request');
         req.keyStore = keyStore;
+        req.user = decodeUser;
         return next();
     } catch (error) {
         throw error;
