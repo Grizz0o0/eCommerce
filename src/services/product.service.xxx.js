@@ -26,18 +26,18 @@ class ProductFactory {
      * type : 'Clothing',
      * payload
      */
+    static productRegistry = {}; // key-class
+
+    static registerProductType(type, classRef) {
+        ProductFactory.productRegistry[type] = classRef;
+    }
 
     static async createProduct(type, payload) {
-        switch (type) {
-            case 'Electronics':
-                return new ElectronicsProduct(payload).createProduct();
-            case 'Clothing':
-                return new ClothingsProduct(payload).createProduct();
-            case 'Furniture':
-                return new FurnitureProduct(payload).createProduct();
-            default:
-                throw new BadRequestError(`Invalid Product Types::: ${type}`);
-        }
+        const productClass = ProductFactory.productRegistry[type];
+        if (!productClass)
+            throw new BadRequestError(`Invalid Product Types::: ${type}`);
+
+        return new productClass(payload).createProduct();
     }
 }
 
@@ -117,4 +117,10 @@ class FurnitureProduct extends Product {
         return newProduct;
     }
 }
+
+// register product type
+ProductFactory.registerProductType('Electronics', ElectronicsProduct);
+ProductFactory.registerProductType('Clothing', ClothingsProduct);
+ProductFactory.registerProductType('Furniture', FurnitureProduct);
+
 module.exports = ProductFactory;

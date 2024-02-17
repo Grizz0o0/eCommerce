@@ -9,6 +9,6 @@ const router = express.Router();
 // authentication
 router.use(authentication);
 ///////////////////
-router.post('', asyncHandler(productController.createProducts));
+router.post('', asyncHandler(productController.createProduct));
 
 module.exports = router;

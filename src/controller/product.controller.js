@@ -1,13 +1,15 @@
 'use strict';
 
 const ProductService = require('../services/product.service');
+const ProductServiceV2 = require('../services/product.service.xxx');
 const { OK, CREATED, SuccessResponse } = require('../core/success.response');
 
 class ProductController {
-    createProducts = async (req, res, next) => {
+    createProduct = async (req, res, next) => {
+        console.log(123456);
         new SuccessResponse({
             massage: 'Create Product Success!',
-            metadata: await ProductService.createProduct(
+            metadata: await ProductServiceV2.createProduct(
                 req.body.product_type,
                 {
                     ...req.body,
