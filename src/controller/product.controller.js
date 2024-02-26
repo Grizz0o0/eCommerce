@@ -47,7 +47,7 @@ class ProductController {
      */
     getAllDraftForShop = async (req, res, next) => {
         new SuccessResponse({
-            massage: 'Get List Draft Success!',
+            massage: 'Get List Drafts Success!',
             metadata: await ProductServiceV2.findAllDraftForShop({
                 product_shop: req.user.userId,
             }),
@@ -65,8 +65,24 @@ class ProductController {
 
     getListSearchProduct = async (req, res, next) => {
         new SuccessResponse({
-            massage: 'Get List Search Product Success!',
+            massage: 'Get List Search Products Success!',
             metadata: await ProductServiceV2.searchProducts(req.params),
+        }).send(res);
+    };
+
+    getAllProducts = async (req, res, next) => {
+        new SuccessResponse({
+            massage: 'Get All Products Success!',
+            metadata: await ProductServiceV2.findAllProducts(req.query),
+        }).send(res);
+    };
+
+    GetProduct = async (req, res, next) => {
+        new SuccessResponse({
+            massage: 'Get Product Success!',
+            metadata: await ProductServiceV2.findProduct({
+                product_id: req.params.product_id,
+            }),
         }).send(res);
     };
     // END QUERY //
