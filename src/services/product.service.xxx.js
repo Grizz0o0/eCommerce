@@ -15,7 +15,14 @@ const {
     searchProductByUser,
     findAllProducts,
     findProduct,
+    updateProductById,
 } = require('../models/repositories/product.repo');
+
+const {
+    removeUndefinedObject,
+    updateNestedObjectParser,
+} = require('../untils/index');
+
 /*
     product_name: { type: String, required: true },
     product_thumb: { type: String, required: true },
@@ -49,12 +56,12 @@ class ProductFactory {
         return new productClass(payload).createProduct();
     }
 
-    static async updateProduct(type, payload) {
+    static async updateProduct(type, productId, payload) {
         const productClass = ProductFactory.productRegistry[type];
         if (!productClass)
             throw new BadRequestError(`Invalid Product Types::: ${type}`);
 
-        return new productClass(payload).createProduct();
+        return new productClass(payload).updateProduct(productId);
     }
 
     // PUT //
@@ -132,6 +139,15 @@ class Product {
     async createProduct(product_id) {
         return await product.create({ ...this, _id: product_id });
     }
+
+    // update product
+    async updateProduct(productId, bodyUpdate) {
+        return await updateProductById({
+            productId,
+            bodyUpdate,
+            model: product,
+        });
+    }
 }
 
 // define sub-class for different product types Electronics
@@ -147,6 +163,35 @@ class ElectronicsProduct extends Product {
         const newProduct = await super.createProduct(newElectronic._id);
         if (!newProduct) throw new BadRequestError('Create new Product error');
         return newProduct;
+    }
+
+    async updateProduct(productId) {
+        /**
+            {
+                a: undefined,
+                b: null
+            }
+
+            1. remove attr has undefined null
+            2. check xem update o cho nao ?
+         */
+
+        const objectParams = removeUndefinedObject(this);
+        if (objectParams.product_attributes) {
+            await updateProductById({
+                productId,
+                bodyUpdate: updateNestedObjectParser(
+                    objectParams.product_attributes
+                ),
+                model: electronic,
+            });
+        }
+
+        const updateProduct = await super.updateProduct(
+            productId,
+            updateNestedObjectParser(objectParams)
+        );
+        return updateProduct;
     }
 }
 
@@ -165,6 +210,34 @@ class ClothingsProduct extends Product {
 
         return newProduct;
     }
+
+    async updateProduct(productId) {
+        /**
+            {
+                a: undefined,
+                b: null
+            }
+
+            1. remove attr has undefined null
+            2. check xem update o cho nao ?
+         */
+        const objectParams = removeUndefinedObject(this);
+        if (objectParams.product_attributes) {
+            await updateProductById({
+                productId,
+                bodyUpdate: updateNestedObjectParser(
+                    objectParams.product_attributes
+                ),
+                model: clothing,
+            });
+        }
+
+        const updateProduct = await super.updateProduct(
+            productId,
+            updateNestedObjectParser(objectParams)
+        );
+        return updateProduct;
+    }
 }
 
 class FurnitureProduct extends Product {
@@ -180,6 +253,34 @@ class FurnitureProduct extends Product {
         if (!newProduct) throw new BadRequestError('Create new Product error');
 
         return newProduct;
+    }
+
+    async updateProduct(productId) {
+        /**
+            {
+                a: undefined,
+                b: null
+            }
+
+            1. remove attr has undefined null
+            2. check xem update o cho nao ?
+         */
+        const objectParams = removeUndefinedObject(this);
+        if (objectParams.product_attributes) {
+            await updateProductById({
+                productId,
+                bodyUpdate: updateNestedObjectParser(
+                    objectParams.product_attributes
+                ),
+                model: furniture,
+            });
+        }
+
+        const updateProduct = await super.updateProduct(
+            productId,
+            updateNestedObjectParser(objectParams)
+        );
+        return updateProduct;
     }
 }
 
