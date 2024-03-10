@@ -22,6 +22,7 @@ const {
     removeUndefinedObject,
     updateNestedObjectParser,
 } = require('../untils/index');
+const { insertInventory } = require('../models/repositories/inventory.repo');
 
 /*
     product_name: { type: String, required: true },
@@ -137,7 +138,16 @@ class Product {
 
     // create new product
     async createProduct(product_id) {
-        return await product.create({ ...this, _id: product_id });
+        const newProduct = await product.create({ ...this, _id: product_id });
+
+        if (newProduct) {
+            insertInventory({
+                productId: newProduct._id,
+                shopId: this.product_shop,
+                stock: this.product_quantity,
+            });
+        }
+        return newProduct;
     }
 
     // update product
