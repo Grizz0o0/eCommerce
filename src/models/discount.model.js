@@ -13,7 +13,7 @@ var discountSchema = new Schema(
         discount_type: { type: String, default: 'fixed_amount' }, // percentage
         discount_value: { type: Number, required: true }, // 10.000  10
         discount_code: { type: String, required: true }, // discountCode
-        discount_start_day: { type: Date, required: true }, // ngay bat dau
+        discount_start_date: { type: Date, required: true }, // ngay bat dau
         discount_end_date: { type: String, required: true }, // ngay ket thuc
         discount_max_uses: { type: Number, required: true }, // so luong discount duoc ap dung
         discount_uses_count: { type: Number, required: true }, // so discount da su dung
