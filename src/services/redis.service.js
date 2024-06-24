@@ -7,15 +7,15 @@ const {
 } = require('../models/repositories/inventory.repo');
 const redisClient = redis.createClient();
 
-const pexpire = promisify(redisClient.pexpire).bind(redisClient);
-const setnxAsync = promisify(redisClient.setnx).bind(redisClient);
+const pexpire = promisify(redisClient.pExpire).bind(redisClient);
+const setnxAsync = promisify(redisClient.setNX).bind(redisClient);
 
 const acquireLock = async (productId, quantity, cartId) => {
     const key = `lock_v2024_${productId}`;
     const retrtTimes = 10; // cho thu lai 10 lan
     const expireTime = 3000; // tam lock 3 giay
 
-    for (let i = 0; i < retrtTimes.length; i++) {
+    for (let i = 0; i < retrtTimes; i++) {
         const result = await setnxAsync(key, expireTime);
         console.log(`result::: ${result}`);
         if (result === 1) {
