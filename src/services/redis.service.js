@@ -1,11 +1,30 @@
 'use strict';
 
-const redis = require('redis');
+const { createClient } = require('redis');
 const { promisify } = require('util');
 const {
     reservationInventory,
 } = require('../models/repositories/inventory.repo');
-const redisClient = redis.createClient();
+
+const redisClient = createClient();
+
+redisClient.on('error', (err) => {
+    console.error('Redis Client Error', err);
+});
+
+(async () => {
+    try {
+        // Kết nối tới Redis server
+        await redisClient.connect();
+        console.log(`Connected to Redis: ${redisClient.isReady}`);
+        const result = await redisClient.ping();
+        console.log(`PING: ${result}`);
+    } catch (err) {
+        console.error(`Error: ${err}`);
+    } finally {
+        await redisClient.disconnect();
+    }
+})();
 
 const pexpire = promisify(redisClient.pExpire).bind(redisClient);
 const setnxAsync = promisify(redisClient.setNX).bind(redisClient);
