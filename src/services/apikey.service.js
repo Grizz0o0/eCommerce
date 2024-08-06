@@ -8,7 +8,6 @@ const findById = async (key) => {
     //     permissions: ['0000'],
     // });
     // console.log(newKey);
-
     const objKey = await apikeyModel.findOne({ key, status: true });
     return objKey;
 };

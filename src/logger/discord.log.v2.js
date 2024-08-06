@@ -37,7 +37,7 @@ class LoggerService {
             title = 'Code Example',
         } = logData;
 
-        const codeMassage = {
+        const codeMessage = {
             content: message,
             embeds: [
                 {
@@ -51,18 +51,18 @@ class LoggerService {
 
         const channel = this.client.channels.cache.get(this.channelId);
 
-        console.log(`channel::: ${channel}`);
-        console.log(`channelID::: ${CHANNELID_DISCORD}`);
-        console.log(`logData::: ${logData}`);
+        // console.log(`channel::: ${channel}`);
+        // console.log(`channelID::: ${CHANNELID_DISCORD}`);
+        // console.log(`logData::: ${logData}`);
         if (!channel) {
             console.error(`Couldn't find the channel. ${this.channelId}`);
             return;
         }
 
-        this.sendToMassage(codeMassage);
+        this.sendToMessage(codeMessage);
     }
 
-    sendToMassage(message = 'message') {
+    sendToMessage(message = 'message') {
         const channel = this.client.channels.cache.get(this.channelId);
         if (!channel) {
             console.error(`Couldn't find the channel: ${this.channelId}`);

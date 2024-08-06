@@ -216,7 +216,7 @@ class AccessService {
             if (!KeyStore) {
                 return {
                     code: 'xxxx',
-                    massage: 'KeyStore error',
+                    message: 'KeyStore error',
                 };
             }
 
@@ -246,7 +246,7 @@ class AccessService {
         // } catch (error) {
         //     return {
         //         code: 'xxx',
-        //         massage: error.massage,
+        //         message: error.message,
         //     };
         // }
     };

@@ -6,7 +6,7 @@ const { OK, CREATED, SuccessResponse } = require('../core/success.response');
 class AccessController {
     handlerRefreshToken = async (req, res, next) => {
         // new SuccessResponse({
-        //     massage: 'Get token success!',
+        //     message: 'Get token success!',
         //     metadata: await AccessService.handlerRefreshToken(
         //         req.body.refreshToken
         //     ),
@@ -14,7 +14,7 @@ class AccessController {
 
         // No need accessToken
         new SuccessResponse({
-            massage: 'Get token success!',
+            message: 'Get token success!',
             metadata: await AccessService.handlerRefreshTokenV2({
                 refreshToken: req.refreshToken,
                 user: req.user,
@@ -25,14 +25,15 @@ class AccessController {
 
     logout = async (req, res, next) => {
         new SuccessResponse({
-            massage: 'Logout success!',
+            message: 'Logout success!',
             metadata: await AccessService.logout(req.keyStore),
         }).send(res);
     };
 
     login = async (req, res, next) => {
+        console.log(123);
         new SuccessResponse({
-            massage: 'Login success!',
+            message: 'Login success!',
             metadata: await AccessService.login(req.body),
         }).send(res);
     };
@@ -42,7 +43,7 @@ class AccessController {
         // return res.status(201).json(await AccessService.signUp(req.body));
 
         new CREATED({
-            massage: 'Registered',
+            message: 'Registered',
             metadata: await AccessService.signUp(req.body),
             options: {
                 limit: 10,

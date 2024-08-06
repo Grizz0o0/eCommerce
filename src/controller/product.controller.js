@@ -7,7 +7,7 @@ const { OK, CREATED, SuccessResponse } = require('../core/success.response');
 class ProductController {
     createProduct = async (req, res, next) => {
         new SuccessResponse({
-            massage: 'Create Product Success!',
+            message: 'Create Product Success!',
             metadata: await ProductServiceV2.createProduct(
                 req.body.product_type,
                 {
@@ -20,7 +20,7 @@ class ProductController {
 
     updateProduct = async (req, res, next) => {
         new SuccessResponse({
-            massage: 'Update Product Success!',
+            message: 'Update Product Success!',
             metadata: await ProductServiceV2.updateProduct(
                 req.body.product_type,
                 req.params.productId,
@@ -34,7 +34,7 @@ class ProductController {
 
     publishProductByShop = async (req, res, next) => {
         new SuccessResponse({
-            massage: 'publishProductByShop Success!',
+            message: 'publishProductByShop Success!',
             metadata: await ProductServiceV2.publishProductByShop({
                 product_id: req.params.id,
                 product_shop: req.user.userId,
@@ -44,7 +44,7 @@ class ProductController {
 
     unPublishProductByShop = async (req, res, next) => {
         new SuccessResponse({
-            massage: 'unPublishProductByShop Success!',
+            message: 'unPublishProductByShop Success!',
             metadata: await ProductServiceV2.unPublishProductByShop({
                 product_id: req.params.id,
                 product_shop: req.user.userId,
@@ -61,7 +61,7 @@ class ProductController {
      */
     getAllDraftForShop = async (req, res, next) => {
         new SuccessResponse({
-            massage: 'Get List Drafts Success!',
+            message: 'Get List Drafts Success!',
             metadata: await ProductServiceV2.findAllDraftForShop({
                 product_shop: req.user.userId,
             }),
@@ -70,7 +70,7 @@ class ProductController {
 
     getAllPublishForShop = async (req, res, next) => {
         new SuccessResponse({
-            massage: 'Get List Published Success!',
+            message: 'Get List Published Success!',
             metadata: await ProductServiceV2.findAllPublishForShop({
                 product_shop: req.user.userId,
             }),
@@ -79,21 +79,21 @@ class ProductController {
 
     getListSearchProduct = async (req, res, next) => {
         new SuccessResponse({
-            massage: 'Get List Search Products Success!',
+            message: 'Get List Search Products Success!',
             metadata: await ProductServiceV2.searchProducts(req.params),
         }).send(res);
     };
 
     getAllProducts = async (req, res, next) => {
         new SuccessResponse({
-            massage: 'Get All Products Success!',
+            message: 'Get All Products Success!',
             metadata: await ProductServiceV2.findAllProducts(req.query),
         }).send(res);
     };
 
     GetProduct = async (req, res, next) => {
         new SuccessResponse({
-            massage: 'Get Product Success!',
+            message: 'Get Product Success!',
             metadata: await ProductServiceV2.findProduct({
                 product_id: req.params.product_id,
             }),

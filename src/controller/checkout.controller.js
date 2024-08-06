@@ -6,7 +6,7 @@ const { SuccessResponse } = require('../core/success.response');
 class CheckoutController {
     checkoutReview = async (req, res, next) => {
         new SuccessResponse({
-            massage: 'Create New Cart Success',
+            message: 'Create New Cart Success',
             metadata: await CheckoutService.checkoutReview(req.body),
         }).send(res);
     };

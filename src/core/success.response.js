@@ -12,12 +12,12 @@ const ReasonStatusCode = {
 
 class SuccessResponse {
     constructor({
-        massage,
+        message,
         statusCode = StatusCode.OK,
         reasonStatusCode = ReasonStatusCode.OK,
         metadata = {},
     }) {
-        this.massage = !massage ? reasonStatusCode : massage;
+        this.message = !message ? reasonStatusCode : message;
         this.statusCode = statusCode;
         this.metadata = metadata;
     }
@@ -28,20 +28,20 @@ class SuccessResponse {
 }
 
 class OK extends SuccessResponse {
-    constructor({ massage, metadata }) {
-        super({ massage, metadata });
+    constructor({ message, metadata }) {
+        super({ message, metadata });
     }
 }
 
 class CREATED extends SuccessResponse {
     constructor({
         options = {},
-        massage,
+        message,
         statusCode = StatusCode.CREATED,
         reasonStatusCode = ReasonStatusCode.CREATED,
         metadata,
     }) {
-        super({ massage, statusCode, reasonStatusCode, metadata });
+        super({ message, statusCode, reasonStatusCode, metadata });
         this.options = options;
     }
 }

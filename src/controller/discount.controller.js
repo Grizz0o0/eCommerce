@@ -6,7 +6,7 @@ const { OK, CREATED, SuccessResponse } = require('../core/success.response');
 class DiscountController {
     createDiscountCode = async (req, res, next) => {
         new CREATED({
-            massage: 'Create DiscountCode success!',
+            message: 'Create DiscountCode success!',
             metadata: await DiscountService.createDiscountCode({
                 ...req.body,
                 shopId: req.user.userId,
@@ -16,7 +16,7 @@ class DiscountController {
 
     updateDiscountCode = async (req, res, next) => {
         new SuccessResponse({
-            massage: 'Update DiscountCode success!',
+            message: 'Update DiscountCode success!',
             metadata: await DiscountService.updateDiscountCode({
                 discount_id: req.params.discountId,
                 bodyUpdate: req.body,
@@ -26,7 +26,7 @@ class DiscountController {
 
     getAllDiscountCodeWithProduct = async (req, res, next) => {
         new SuccessResponse({
-            massage: 'Get List Discount Code With Product Success!',
+            message: 'Get List Discount Code With Product Success!',
             metadata: await DiscountService.getAllDiscountCodeWithProduct({
                 ...req.query,
             }),
@@ -35,7 +35,7 @@ class DiscountController {
 
     getAllDiscountCodesByShop = async (req, res, next) => {
         new SuccessResponse({
-            massage: 'Get List Discount Codes By Shop Found!',
+            message: 'Get List Discount Codes By Shop Found!',
             metadata: await DiscountService.getAllDiscountCodesByShop({
                 ...req.query,
                 shopId: req.user.userId,
@@ -45,21 +45,21 @@ class DiscountController {
 
     getDiscountAmount = async (req, res, next) => {
         new SuccessResponse({
-            massage: 'Get Discount Amount Success!',
+            message: 'Get Discount Amount Success!',
             metadata: await DiscountService.getDiscountAmount({ ...req.body }),
         }).send(res);
     };
 
     deleteDiscountCode = async (req, res, next) => {
         new SuccessResponse({
-            massage: 'Delete Discount Success!',
+            message: 'Delete Discount Success!',
             metadata: await DiscountService.deleteDiscountCode({ ...req.body }),
         }).send(res);
     };
 
     cancelDiscountCode = async (req, res, next) => {
         new SuccessResponse({
-            massage: 'Cancel Discount Success!',
+            message: 'Cancel Discount Success!',
             metadata: await DiscountService.cancelDiscountCode({ ...req.body }),
         }).send(res);
     };

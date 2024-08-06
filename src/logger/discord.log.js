@@ -17,9 +17,9 @@ client.on('ready', () => {
 const token = TOKEN_DISCORD;
 client.login(token);
 
-client.on('messageCreate', (massage) => {
-    if (massage.author.bot) return;
-    if (massage.content == 'hello') {
-        massage.reply(`Em có thể giúp gì cho đại ca !`);
+client.on('messageCreate', (message) => {
+    if (message.author.bot) return;
+    if (message.content == 'hello') {
+        message.reply(`Em có thể giúp gì cho đại ca !`);
     }
 });
