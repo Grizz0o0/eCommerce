@@ -21,9 +21,10 @@ const {
 const {
     removeUndefinedObject,
     updateNestedObjectParser,
-} = require('../untils/index');
+    convertToObjectIdMongodb,
+} = require('../utils/index');
 const { insertInventory } = require('../models/repositories/inventory.repo');
-
+const mongoose = require('mongoose');
 /*
     product_name: { type: String, required: true },
     product_thumb: { type: String, required: true },
@@ -65,6 +66,13 @@ class ProductFactory {
         return new productClass(payload).updateProduct(productId);
     }
 
+    static async deleteProduct(type, productId) {
+        const productClass = ProductFactory.productRegistry[type];
+        if (!productClass)
+            throw new BadRequestError(`Invalid Product Types::: ${type}`);
+        return new productClass(type).deleteProduct(productId);
+    }
+
     // PUT //
     static async publishProductByShop({ product_shop, product_id }) {
         return await publishProductByShop({ product_shop, product_id });
@@ -97,6 +105,7 @@ class ProductFactory {
         filter = { isPublished: true },
         select = [
             'product_name',
+            'product_type',
             'product_thumb',
             'product_price',
             'product_shop',
@@ -163,6 +172,13 @@ class Product {
             model: product,
         });
     }
+
+    async deleteProduct(productId) {
+        const productToDelete = await product.findById(productId);
+        if (!productToDelete) throw new BadRequestError('Product not found');
+
+        return await product.findByIdAndDelete(productId);
+    }
 }
 
 // define sub-class for different product types Electronics
@@ -207,6 +223,15 @@ class ElectronicsProduct extends Product {
             updateNestedObjectParser(objectParams)
         );
         return updateProduct;
+    }
+
+    async deleteProduct(productId) {
+        const objectId = new mongoose.Types.ObjectId(productId);
+
+        const deletedProduct = await electronic.findByIdAndDelete(objectId);
+        if (!deletedProduct) throw new BadRequestError('Product not found');
+
+        return await super.deleteProduct(objectId);
     }
 }
 
@@ -253,6 +278,15 @@ class ClothingsProduct extends Product {
         );
         return updateProduct;
     }
+
+    async deleteProduct(productId) {
+        const objectId = new mongoose.Types.ObjectId(productId);
+
+        const deletedProduct = await clothing.findByIdAndDelete(objectId);
+        if (!deletedProduct) throw new BadRequestError('Product not found');
+
+        return await super.deleteProduct(objectId);
+    }
 }
 
 class FurnitureProduct extends Product {
@@ -296,6 +330,15 @@ class FurnitureProduct extends Product {
             updateNestedObjectParser(objectParams)
         );
         return updateProduct;
+    }
+
+    async deleteProduct(productId) {
+        const objectId = new mongoose.Types.ObjectId(productId);
+
+        const deletedProduct = await furniture.findByIdAndDelete(objectId);
+        if (!deletedProduct) throw new BadRequestError('Product not found');
+
+        return await super.deleteProduct(objectId);
     }
 }
 

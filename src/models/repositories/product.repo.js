@@ -9,7 +9,7 @@ const {
     getSelectData,
     unGetSelectData,
     convertToObjectIdMongodb,
-} = require('../../untils/index');
+} = require('../../utils/index');
 const { Types } = require('mongoose');
 
 const findAllDraftForShop = async ({ query, limit, skip }) => {

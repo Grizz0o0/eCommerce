@@ -5,7 +5,7 @@ const {
     convertToObjectIdMongodb,
     updateNestedObjectParser,
     removeUndefinedObject,
-} = require('../untils');
+} = require('../utils');
 const { findAllProducts } = require('../models/repositories/product.repo');
 const {
     findAllDiscountCodesSelect,

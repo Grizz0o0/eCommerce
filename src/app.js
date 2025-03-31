@@ -4,6 +4,7 @@ const express = require('express');
 const { default: helmet } = require('helmet');
 const morgan = require('morgan');
 const app = express();
+const cors = require('cors');
 
 // init middlewares
 app.use(morgan('dev'));
@@ -15,11 +16,26 @@ app.use(express.urlencoded({ extended: true }));
 require('./tests/inventory.test');
 const productTest = require('./tests/product.test');
 productTest.purchaseProduct('product:001', 10);
+
 // init db
 require('./dbs/init.mongodb');
 // const { checkOverload } = require('./helpers/check.connect');
 // checkOverload();
 // init routes
+
+app.use(
+    cors({
+        origin: 'http://localhost:3000', // Cho phép từ frontend
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'], // Phương thức HTTP được phép
+        allowedHeaders: [
+            'Content-Type',
+            'x-api-key',
+            'authorization',
+            'x-client-id',
+            'x-rtoken-id',
+        ], // Các header được phép
+    })
+);
 app.use('/', require('./routes'));
 
 // handling error

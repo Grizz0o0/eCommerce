@@ -31,7 +31,6 @@ class AccessController {
     };
 
     login = async (req, res, next) => {
-        console.log(123);
         new SuccessResponse({
             message: 'Login success!',
             metadata: await AccessService.login(req.body),
@@ -48,6 +47,14 @@ class AccessController {
             options: {
                 limit: 10,
             },
+        }).send(res);
+    };
+
+    getMe = async (req, res, next) => {
+        console.log(req.user);
+        new OK({
+            message: 'Get my profile success!',
+            metadata: await AccessService.getMe(req.user),
         }).send(res);
     };
 }

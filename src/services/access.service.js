@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const KeyTokenService = require('./keyToken.service');
 const { createTokenPair, verify } = require('../auth/authUtils');
-const { getInfoData } = require('../untils');
+const { getInfoData } = require('../utils');
 const {
     BadRequestError,
     AuthFailureError,
@@ -20,9 +20,17 @@ const RoleShop = {
     ADMIN: 'ADMIN',
 };
 class AccessService {
+    static getMe = async (user) => {
+        const foundShop = await shopModel
+            .findById(user.userId)
+            .select('_id name email rules');
+        if (!foundShop)
+            throw new ForbiddenError('Something wrong happen !! Pls relogin');
+        return foundShop;
+    };
+
     static handlerRefreshTokenV2 = async ({ refreshToken, keyStore, user }) => {
         const { userId, email } = user;
-
         if (keyStore.refreshTokenUsed.includes(refreshToken)) {
             await KeyTokenService.deleteKeyById(userId);
             throw new ForbiddenError('Something wrong happen !! Pls relogin');
@@ -58,7 +66,6 @@ class AccessService {
     };
 
     static handlerRefreshToken = async (refreshToken) => {
-        console.log(refreshToken);
         const foundToken = await KeyTokenService.findByRefreshTokenUsed(
             refreshToken
         );
@@ -69,8 +76,9 @@ class AccessService {
                 refreshToken,
                 foundToken.privateKey
             );
-
             console.log({ userId, email });
+            if (!userId || !email)
+                throw new AuthFailureError('Authentication failed');
             // xoa
             await KeyTokenService.deleteKeyById(userId);
             throw new ForbiddenError('Something wrong happen !! Pls relogin');
@@ -229,26 +237,17 @@ class AccessService {
             console.log(`Created Token Success:::`, tokens);
 
             return {
-                code: 201,
-                metadata: {
-                    shop: getInfoData({
-                        fields: ['id', 'name', 'email'],
-                        object: newShop,
-                    }),
-                    tokens,
-                },
+                shop: getInfoData({
+                    fields: ['_id', 'name', 'email'],
+                    object: newShop,
+                }),
+                tokens,
             };
         }
         return {
             code: 200,
             metadata: null,
         };
-        // } catch (error) {
-        //     return {
-        //         code: 'xxx',
-        //         message: error.message,
-        //     };
-        // }
     };
 }
 

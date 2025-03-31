@@ -54,7 +54,7 @@ productSchema.pre('save', function (next) {
 
 const clothingSchema = new Schema(
     {
-        brand: { type: String, required: true },
+        brand: { type: String},
         size: { type: String },
         material: { type: String },
         product_shop: { type: Schema.Types.ObjectId, ref: 'Shop' },
@@ -67,7 +67,7 @@ const clothingSchema = new Schema(
 
 const electronicSchema = new Schema(
     {
-        manufacturer: { type: String, required: true },
+        manufacturer: { type: String},
         model: { type: String },
         color: { type: String },
         product_shop: { type: Schema.Types.ObjectId, ref: 'Shop' },
@@ -80,7 +80,7 @@ const electronicSchema = new Schema(
 
 const furnitureSchema = new Schema(
     {
-        manufacturer: { type: String, required: true },
+        manufacturer: { type: String},
         model: { type: String },
         color: { type: String },
         product_shop: { type: Schema.Types.ObjectId, ref: 'Shop' },

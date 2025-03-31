@@ -12,7 +12,7 @@ router.get(
 );
 
 router.get('', asyncHandler(productController.getAllProducts));
-router.get('/:product_id', asyncHandler(productController.GetProduct));
+router.get('/:product_id', asyncHandler(productController.getProduct));
 
 // authentication
 router.use(authentication);
@@ -20,6 +20,7 @@ router.use(authentication);
 
 router.post('', asyncHandler(productController.createProduct));
 router.patch('/:productId', asyncHandler(productController.updateProduct));
+router.delete('/:productId', asyncHandler(productController.deleteProduct));
 router.post(
     '/publish/:id',
     asyncHandler(productController.publishProductByShop)

@@ -10,13 +10,18 @@ const router = express.Router();
 router.post('/shop/signup', asyncHandler(accessController.signUp));
 router.post('/shop/login', asyncHandler(accessController.login));
 
-// authentication
-router.use(authenticationV2);
-//////////////////////////////////////////////////
-router.post('/shop/logout', asyncHandler(accessController.logout));
+// authenticationV2
 router.post(
-    '/shop/handlerRefreshToken',
+    '/shop/handlerRefreshToken',authenticationV2,
     asyncHandler(accessController.handlerRefreshToken)
 );
+
+// authentication
+router.use(authentication);
+
+//////////////////////////////////////////////////
+router.get('/shop/me', asyncHandler(accessController.getMe));
+router.post('/shop/logout', asyncHandler(accessController.logout));
+
 
 module.exports = router;

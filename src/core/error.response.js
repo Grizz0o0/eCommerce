@@ -10,7 +10,7 @@ const ReasonStatusCode = {
     CONFLICT: 'Conflict error',
 };
 
-const { StatusCodes, ReasonPhrases } = require('../untils/httpStatusCode');
+const { StatusCodes, ReasonPhrases } = require('../utils/httpStatusCode');
 
 class ErrorResponse extends Error {
     constructor(message, status) {

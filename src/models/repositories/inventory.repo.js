@@ -2,7 +2,7 @@
 
 const { Types } = require('mongoose');
 const inventory = require('../inventory.model');
-const { convertToObjectIdMongodb } = require('../../untils');
+const { convertToObjectIdMongodb } = require('../../utils');
 const insertInventory = async ({
     productId,
     shopId,

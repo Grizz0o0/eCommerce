@@ -34,6 +34,16 @@ const createTokenPair = async (payload, publicKey, privateKey) => {
     } catch (error) {}
 };
 
+const handleJwtError = (error) => {
+    if (error.name === 'TokenExpiredError') {
+        throw new AuthFailureError('Token has expired');
+    } else if (error.name === 'JsonWebTokenError') {
+        throw new AuthFailureError('Invalid token');
+    } else {
+        throw error; // Các lỗi khác
+    }
+};
+
 const authentication = asyncHandler(async (req, res, next) => {
     /**
      * 1. Check userId missing ?
@@ -46,27 +56,28 @@ const authentication = asyncHandler(async (req, res, next) => {
 
     // 1
     const userId = req.headers[HEADER.CLIENT_ID];
-    if (!userId) throw new AuthFailureError('Invalid  Request');
+    if (!userId) throw new AuthFailureError('Missing or invalid client ID');
 
     // 2
     const keyStore = await findByUserId(userId);
-    if (!keyStore) throw new NotFoundError('Not Found KeyStore');
+    if (!keyStore) throw new NotFoundError('KeyStore not found for this user');
     console.log(keyStore);
     // 3
     const accessToken = req.headers[HEADER.AUTHORIZATION];
-    if (!accessToken) throw new AuthFailureError('Invalid  Request');
-
-    // 4
+    if (!accessToken)
+        throw new AuthFailureError('Missing or invalid authorization token');
 
     try {
+        // 4
         const decodeUser = JWT.verify(accessToken, keyStore.publicKey);
         if (userId !== decodeUser.userId)
-            throw new AuthFailureError('Invalid Request');
+            throw new AuthFailureError('Token user ID mismatch');
         req.keyStore = keyStore;
         req.user = decodeUser;
         return next();
     } catch (error) {
-        throw error;
+        console.error(`Authentication error: ${error.message}`);
+        handleJwtError(error);
     }
 });
 
@@ -82,32 +93,54 @@ const authenticationV2 = asyncHandler(async (req, res, next) => {
 
     // 1
     const userId = req.headers[HEADER.CLIENT_ID];
-    if (!userId) throw new AuthFailureError('Invalid  Request');
+    if (!userId) throw new AuthFailureError('Missing or invalid client ID');
 
     // 2
     const keyStore = await findByUserId(userId);
-    if (!keyStore) throw new NotFoundError('Not Found KeyStore');
-    console.log(keyStore);
+    if (!keyStore) throw new NotFoundError('KeyStore not found for this user');
     // 3
     if (req.headers[HEADER.REFRESHTOKEN]) {
         try {
             const refreshToken = req.headers[HEADER.REFRESHTOKEN];
             const decodeUser = JWT.verify(refreshToken, keyStore.privateKey);
             if (userId !== decodeUser.userId)
-                throw new AuthFailureError('Invalid Request');
+                throw new AuthFailureError('Token user ID mismatch');
             req.keyStore = keyStore;
             req.user = decodeUser;
             req.refreshToken = refreshToken;
             return next();
         } catch (error) {
-            throw error;
+            console.error(`Authentication error: ${error.message}`);
+            handleJwtError(error);
         }
     }
 });
 
 const verify = async (token, keySecret) => {
-    return await JWT.verify(token, keySecret);
+    try {
+        const decoded = JWT.verify(token, keySecret);
+        return decoded;
+    } catch (err) {
+        console.log(err);
+        if (err.name === 'TokenExpiredError') {
+            throw new AuthFailureError('Token has expired');
+        } else if (err.name === 'JsonWebTokenError') {
+            throw new AuthFailureError('Invalid token');
+        } else {
+            throw new AuthFailureError('Token verification failed');
+        }
+    }
 };
+
+// return await JWT.verify(token, keySecret, (err, decode) => {
+//         if (err) {
+//             if (err.name === 'TokenExpiredError') {
+//                 throw new AuthFailureError('token_expired');
+//             } else {
+//                 throw new AuthFailureError('invalid_token');
+//             }
+//         }
+//     });
 
 module.exports = {
     createTokenPair,

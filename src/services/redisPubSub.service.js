@@ -1,11 +1,11 @@
 'use strict';
 
-const redis = require('redis');
+const {createClient} = require('redis');
 
 class RedisPubSubService {
     constructor() {
-        this.subscriber = redis.createClient();
-        this.publisher = redis.createClient();
+        this.subscriber = createClient();
+        this.publisher = createClient();
     }
 
     async publish(channel, message) {

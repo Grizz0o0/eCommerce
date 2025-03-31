@@ -32,6 +32,16 @@ class ProductController {
         }).send(res);
     };
 
+    deleteProduct = async (req, res, next) => {
+        new SuccessResponse({
+            message: 'Delete Product Success!',
+            metadata: await ProductServiceV2.deleteProduct(
+                req.body.product_type,
+                req.params.productId
+            ),
+        }).send(res);
+    };
+
     publishProductByShop = async (req, res, next) => {
         new SuccessResponse({
             message: 'publishProductByShop Success!',
@@ -91,7 +101,7 @@ class ProductController {
         }).send(res);
     };
 
-    GetProduct = async (req, res, next) => {
+    getProduct = async (req, res, next) => {
         new SuccessResponse({
             message: 'Get Product Success!',
             metadata: await ProductServiceV2.findProduct({

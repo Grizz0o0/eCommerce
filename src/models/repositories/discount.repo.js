@@ -1,6 +1,6 @@
 'use strict';
 
-const { unGetSelectData, getSelectData } = require('../../untils/index');
+const { unGetSelectData, getSelectData } = require('../../utils/index');
 
 const findAllDiscountCodesUnSelect = async ({
     limit = 50,

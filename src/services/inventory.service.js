@@ -4,7 +4,7 @@ const { BadRequestError } = require('../core/error.response');
 const inventory = require('../models/inventory.model');
 const { product } = require('../models/product.model');
 const { getProductById } = require('../models/repositories/product.repo');
-const { convertToObjectIdMongodb } = require('../untils');
+const { convertToObjectIdMongodb } = require('../utils');
 
 class InventoryService {
     static async addStockToInventory({
@@ -14,7 +14,7 @@ class InventoryService {
         location = 'Cu Da, Cu Khe, Thanh Oai, Ha Noi',
     }) {
         const products = await getProductById(productId);
-        if (!product) {
+        if (!products) {
             throw new BadRequestError(`The product does not exists!`);
         }
 
